@@ -1,0 +1,34 @@
+[project]
+name = "nexus-pilot-144-alan-vo"
+version = "1.0.0"
+description = "Course platform for learning Large Language Models with roadmaps and Colab notebooks"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Alan Vo", email = "alanvo@gmail.com"}
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",
+    "ruff>=0.4",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+select = ["E", "F", "I", "UP", "W"]
+ignore = []
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["backend/tests"]
+pythonpath = ["backend"]

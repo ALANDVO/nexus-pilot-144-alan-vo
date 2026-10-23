@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "nexus-pilot-144-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: nexus-pilot-144-alan-vo",
+  "workflows": [
+    "Browse structured LLM learning roadmaps with progress tracking",
+    "Launch validated Colab notebooks for fine-tuning workflows",
+    "Follow interactive guides for Axolotl, DPO/RLHF, GGUF quantization, and function calling"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}
