@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from app.models.course import CourseModule, Lesson, UserProgress, User, UserRole
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class CourseService:
@@ -52,7 +52,7 @@ class CourseService:
             progress = UserProgress(user_id=user_id, lesson_id=lesson_id)
             self.db.add(progress)
         progress.completed = 1 if completed else 0
-        progress.completed_at = datetime.utcnow() if completed else None
+        progress.completed_at = datetime.now(timezone.utc) if completed else None
         await self.db.commit()
         await self.db.refresh(progress)
         return progress
