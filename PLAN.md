@@ -60,3 +60,6 @@ Acceptance:
 - Advisory explanations grounded in course content
 - Provider errors handled gracefully
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

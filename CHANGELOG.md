@@ -30,3 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD pipeline with backend/frontend tests and Docker builds
 - Basic responsive UI with health status display
 - MIT License and project documentation
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
