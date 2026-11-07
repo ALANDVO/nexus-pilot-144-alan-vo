@@ -1,16 +1,16 @@
+from datetime import UTC, datetime
+
+from app.models.course import CourseModule, Lesson, User, UserProgress, UserRole
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from app.models.course import CourseModule, Lesson, UserProgress, User, UserRole
-from typing import List, Optional
-from datetime import datetime, timezone
 
 
 class CourseService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def get_modules(self) -> List[CourseModule]:
+    async def get_modules(self) -> list[CourseModule]:
         result = await self.db.execute(
             select(CourseModule)
             .options(selectinload(CourseModule.lessons))
@@ -18,7 +18,7 @@ class CourseService:
         )
         return result.scalars().all()
 
-    async def get_module(self, module_id: int) -> Optional[CourseModule]:
+    async def get_module(self, module_id: int) -> CourseModule | None:
         result = await self.db.execute(
             select(CourseModule)
             .options(selectinload(CourseModule.lessons))
@@ -26,13 +26,13 @@ class CourseService:
         )
         return result.scalar_one_or_none()
 
-    async def get_lesson(self, lesson_id: int) -> Optional[Lesson]:
+    async def get_lesson(self, lesson_id: int) -> Lesson | None:
         result = await self.db.execute(
             select(Lesson).where(Lesson.id == lesson_id)
         )
         return result.scalar_one_or_none()
 
-    async def get_user_progress(self, user_id: int) -> List[UserProgress]:
+    async def get_user_progress(self, user_id: int) -> list[UserProgress]:
         result = await self.db.execute(
             select(UserProgress)
             .options(selectinload(UserProgress.lesson))
@@ -52,12 +52,18 @@ class CourseService:
             progress = UserProgress(user_id=user_id, lesson_id=lesson_id)
             self.db.add(progress)
         progress.completed = 1 if completed else 0
-        progress.completed_at = datetime.now(timezone.utc) if completed else None
+        progress.completed_at = datetime.now(UTC) if completed else None
         await self.db.commit()
         await self.db.refresh(progress)
         return progress
 
-    async def get_or_create_user(self, keycloak_id: str, email: str, username: str, roles: List[str]) -> User:
+    async def get_or_create_user(
+        self,
+        keycloak_id: str,
+        email: str,
+        username: str,
+        roles: list[str],
+    ) -> User:
         result = await self.db.execute(
             select(User).where(User.keycloak_id == keycloak_id)
         )

@@ -1,12 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
-from app.core.database import get_db
-from app.services.course_service import CourseService
-from app.models.course import CourseModule, Lesson, UserProgress
-from pydantic import BaseModel
 from datetime import datetime
 
+from app.core.database import get_db
+from app.services.course_service import CourseService
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/courses", tags=["courses"])
 
@@ -16,7 +14,7 @@ class ModuleResponse(BaseModel):
     title: str
     description: str
     order: int
-    lessons: List["LessonResponse"]
+    lessons: list["LessonResponse"]
 
     class Config:
         from_attributes = True
@@ -53,7 +51,7 @@ ModuleResponse.model_rebuild()
 LessonResponse.model_rebuild()
 
 
-@router.get("/modules", response_model=List[ModuleResponse])
+@router.get("/modules", response_model=list[ModuleResponse])
 async def list_modules(db: AsyncSession = Depends(get_db)):
     service = CourseService(db)
     modules = await service.get_modules()
@@ -78,7 +76,7 @@ async def get_lesson(lesson_id: int, db: AsyncSession = Depends(get_db)):
     return lesson
 
 
-@router.get("/progress", response_model=List[ProgressResponse])
+@router.get("/progress", response_model=list[ProgressResponse])
 async def get_progress(user_id: int, db: AsyncSession = Depends(get_db)):
     service = CourseService(db)
     progress = await service.get_user_progress(user_id)
