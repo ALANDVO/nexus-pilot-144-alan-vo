@@ -7,9 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "127.0.0.1:8000:8000"
-    environment:
       - APP_ENV=development
-      - DATABASE_URL=sqlite:///./nexus_pilot.db
+      - DATABASE_URL=sqlite:////app/data/nexus_pilot.db
       - KEYCLOAK_URL=http://keycloak:8080
       - KEYCLOAK_REALM=nexus-pilot
       - KEYCLOAK_CLIENT_ID=nexus-pilot-frontend

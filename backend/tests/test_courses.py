@@ -1,9 +1,8 @@
 import pytest
-from httpx import AsyncClient, ASGITransport
+from app.core.database import async_session_maker, engine
 from app.main import app
-from app.core.database import init_db, async_session_maker, engine
-from app.models.course import CourseModule, Lesson, Base
-from sqlalchemy import delete
+from app.models.course import Base, CourseModule, Lesson
+from httpx import ASGITransport, AsyncClient
 
 
 @pytest.fixture(scope="function", autouse=True)

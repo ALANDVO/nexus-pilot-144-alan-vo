@@ -1,10 +1,9 @@
 from contextlib import asynccontextmanager
+
+from app.api import courses, health
+from app.core.database import init_db
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.api import health, courses
-from app.core.config import settings
-from app.core.database import init_db
 
 
 @asynccontextmanager
