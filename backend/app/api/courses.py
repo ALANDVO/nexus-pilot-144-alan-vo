@@ -1,9 +1,9 @@
 from datetime import datetime
-
+ 
 from app.core.database import get_db
 from app.services.course_service import CourseService
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/courses", tags=["courses"])
@@ -15,10 +15,8 @@ class ModuleResponse(BaseModel):
     description: str
     order: int
     lessons: list["LessonResponse"]
-
-    class Config:
-        from_attributes = True
-
+ 
+    model_config = ConfigDict(from_attributes=True)
 
 class LessonResponse(BaseModel):
     id: int
@@ -27,29 +25,25 @@ class LessonResponse(BaseModel):
     content: str
     colab_url: str | None
     order: int
-
-    class Config:
-        from_attributes = True
-
+ 
+    model_config = ConfigDict(from_attributes=True)
 
 class ProgressUpdate(BaseModel):
     completed: bool
-
-
+ 
+ 
 class ProgressResponse(BaseModel):
     id: int
     user_id: int
     lesson_id: int
     completed: int
     completed_at: datetime | None
-
-    class Config:
-        from_attributes = True
-
-
+ 
+    model_config = ConfigDict(from_attributes=True)
+ 
+ 
 ModuleResponse.model_rebuild()
 LessonResponse.model_rebuild()
-
 
 @router.get("/modules", response_model=list[ModuleResponse])
 async def list_modules(db: AsyncSession = Depends(get_db)):
