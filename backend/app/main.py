@@ -2,17 +2,17 @@ from contextlib import asynccontextmanager
 
 from app.api import courses, health
 from app.core.database import init_db
+from app.core.seed import seed_default_data
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     await init_db()
+    await seed_default_data()
     yield
     # Shutdown
-
 
 app = FastAPI(
     title="Nexus Pilot LLM Course Platform",
