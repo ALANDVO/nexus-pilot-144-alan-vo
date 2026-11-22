@@ -23,7 +23,29 @@ describe("App", () => {
       })
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => [],
+        json: async () => [{
+          id: 1,
+          title: "Introduction to LLMs",
+          description: "Fundamentals of Large Language Models",
+          order: 1,
+          lessons: [
+            {
+              id: 1,
+              module_id: 1,
+              title: "What are LLMs?",
+              content: "LLMs are large language models...",
+              colab_url: "https://colab.research.google.com/example",
+              order: 1,
+              progress: { completed: true, completed_at: "2024-01-01T00:00:00Z" },
+            },
+          ],
+        }],
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          { lesson_id: 1, completed: 1, completed_at: "2024-01-01T00:00:00Z" },
+        ],
       })
     );
 

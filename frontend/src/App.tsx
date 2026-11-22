@@ -5,12 +5,9 @@ interface HealthResponse {
   service: string;
 }
 
-interface Module {
-  id: number;
-  title: string;
-  description: string;
-  order: number;
-  lessons: Lesson[];
+interface LessonProgress {
+  completed: boolean;
+  completed_at: string | null;
 }
 
 interface Lesson {
@@ -20,11 +17,27 @@ interface Lesson {
   content: string;
   colab_url: string | null;
   order: number;
+  progress: LessonProgress;
+}
+
+interface Module {
+  id: number;
+  title: string;
+  description: string;
+  order: number;
+  lessons: Lesson[];
+}
+
+interface ProgressSummary {
+  user_id: number;
+  total_lessons: number;
+  completed_lessons: number;
 }
 
 function App() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [modules, setModules] = useState<Module[]>([]);
+  const [progress, setProgress] = useState<Map<number, boolean>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,6 +75,27 @@ function App() {
     fetchModules();
   }, []);
 
+  useEffect(() => {
+    async function fetchProgress() {
+      // Fetch progress for user_id=1 (demo user; in production would use authenticated user)
+      try {
+        const response = await fetch("/api/courses/progress?user_id=1");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        const progressMap = new Map<number, boolean>();
+        data.forEach((p: any) => {
+          progressMap.set(p.lesson_id, p.completed === 1);
+        });
+        setProgress(progressMap);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
+      }
+    }
+    fetchProgress();
+  }, []);
+
   return (
     <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
       <header style={{ marginBottom: "2rem" }}>
@@ -93,16 +127,33 @@ function App() {
                   <h3>{module.order}. {module.title}</h3>
                   <p>{module.description}</p>
                   <ul style={{ margin: "0.5rem 0" }}>
-                    {module.lessons?.map((lesson) => (
-                      <li key={lesson.id}>
-                        <strong>{lesson.order}. {lesson.title}</strong>
-                        {lesson.colab_url && (
-                          <a href={lesson.colab_url} target="_blank" rel="noopener noreferrer" style={{ marginLeft: "0.5rem" }}>
-                            Open in Colab
-                          </a>
-                        )}
-                      </li>
-                    ))}
+                    {module.lessons?.map((lesson) => {
+                      const completed = progress.get(lesson.id) || false;
+                      return (
+                        <li key={lesson.id} style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          marginBottom: "0.25rem",
+                        }}>
+                          <span
+                            style={{
+                              width: "12px",
+                              height: "12px",
+                              borderRadius: "50%",
+                              backgroundColor: completed ? "#4ade80" : "#6b7280",
+                              flexShrink: "0",
+                            }}
+                          />
+                          <strong>{lesson.order}. {lesson.title}</strong>
+                          {lesson.colab_url && (
+                            <a href={lesson.colab_url} target="_blank" rel="noopener noreferrer" style={{ marginLeft: "0.5rem", color: "#a78bfa" }}>
+                              Open in Colab
+                            </a>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               ))}
