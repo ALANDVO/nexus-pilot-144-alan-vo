@@ -1,6 +1,6 @@
 [project]
 name = "nexus-pilot-144-alan-vo"
-version = "1.5.0"
+version = "1.6.0"
 description = "Course platform for learning Large Language Models with roadmaps and Colab notebooks"
 readme = "README.md"
 license = {text = "MIT"}

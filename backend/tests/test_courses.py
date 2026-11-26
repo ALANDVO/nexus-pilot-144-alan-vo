@@ -83,3 +83,37 @@ async def test_lesson_not_found():
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get("/api/courses/lessons/999")
         assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_list_notebooks():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/api/courses/notebooks")
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        assert len(data) >= 1
+        assert data[0]["colab_url"] is not None
+        assert data[0]["title"] == "What are LLMs?"
+
+
+@pytest.mark.asyncio
+async def test_list_notebooks_excludes_lessons_without_link():
+    async with async_session_maker() as session:
+        module = await session.get(CourseModule, 1)
+        session.add(Lesson(
+            module_id=module.id,
+            title="Reading assignment",
+            content="Read the chapter.",
+            colab_url=None,
+            order=2,
+        ))
+        await session.commit()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/api/courses/notebooks")
+        assert response.status_code == 200
+        data = response.json()
+        assert all(item["colab_url"] for item in data)
+        assert "Reading assignment" not in [item["title"] for item in data]

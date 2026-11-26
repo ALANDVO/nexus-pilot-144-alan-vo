@@ -26,6 +26,14 @@ class CourseService:
         )
         return result.scalar_one_or_none()
 
+    async def get_lessons_with_notebooks(self) -> list[Lesson]:
+        result = await self.db.execute(
+            select(Lesson)
+            .where(Lesson.colab_url.is_not(None))
+            .order_by(Lesson.order)
+        )
+        return result.scalars().all()
+
     async def get_lesson(self, lesson_id: int) -> Lesson | None:
         result = await self.db.execute(
             select(Lesson).where(Lesson.id == lesson_id)

@@ -61,6 +61,13 @@ async def get_module(module_id: int, db: AsyncSession = Depends(get_db)):
     return module
 
 
+@router.get("/notebooks", response_model=list[LessonResponse])
+async def list_notebooks(db: AsyncSession = Depends(get_db)):
+    service = CourseService(db)
+    lessons = await service.get_lessons_with_notebooks()
+    return lessons
+
+
 @router.get("/lessons/{lesson_id}", response_model=LessonResponse)
 async def get_lesson(lesson_id: int, db: AsyncSession = Depends(get_db)):
     service = CourseService(db)
