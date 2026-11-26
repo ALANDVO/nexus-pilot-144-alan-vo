@@ -1,6 +1,6 @@
 # Nexus Pilot LLM Course Platform — Alan Vo
 
-Current version: `1.5.0`.
+Current version: `1.6.0`.
 
 > Work in progress. This checkpoint may be incomplete or fail tests. See PLAN.md and STATUS.md before use.
 
@@ -94,6 +94,10 @@ graph TB
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | /api/health | Health check |
+| GET | /api/courses/modules | Course modules with lessons |
+| GET | /api/courses/modules/{id} | Single module with lessons |
+| GET | /api/courses/lessons/{id} | Single lesson (incl. Colab link) |
+| GET | /api/courses/notebooks | Lessons that have a Colab notebook link |
 
 ## Configuration
 

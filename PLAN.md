@@ -24,12 +24,16 @@ Tests: `backend/tests/test_health.py`, `backend/tests/test_courses.py`, `fronten
 
 ### course-content — Course content management with roadmaps and notebooks
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - API serves course modules, lessons, and Colab notebook links
 - Frontend displays roadmap with progress tracking
 - Users can browse and launch notebooks
+
+Implementation: `backend/app/api/courses.py`, `backend/app/services/course_service.py`
+
+Tests: `backend/tests/test_courses.py`
 
 ### fine-tuning-workflows — Fine-tuning workflow guides (Axolotl, DPO, quantization)
 

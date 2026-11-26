@@ -39,14 +39,19 @@
     {
       "id": "course-content",
       "title": "Course content management with roadmaps and notebooks",
-      "status": "planned",
+      "status": "in_progress",
       "acceptance": [
         "API serves course modules, lessons, and Colab notebook links",
         "Frontend displays roadmap with progress tracking",
         "Users can browse and launch notebooks"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/api/courses.py",
+        "backend/app/services/course_service.py"
+      ],
+      "tests": [
+        "backend/tests/test_courses.py"
+      ]
     },
     {
       "id": "fine-tuning-workflows",
